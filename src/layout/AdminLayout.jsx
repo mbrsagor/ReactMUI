@@ -18,18 +18,21 @@ const transition = { duration: 0.25, ease: "easeInOut" };
 
 export default function AdminLayout({ mode, toggleTheme }) {
   const [sidebarOpen, setSidebarOpen] = React.useState(true);
-  const [mobileOpen, setMobileOpen] = React.useState(false);
   const location = useLocation();
 
-  const handleDrawerToggle = () => setMobileOpen((s) => !s);
-  const handleSidebarToggle = () => setSidebarOpen((s) => !s);
+  // Sidebar open/close
+  const handleSidebarToggle = () => {
+    setSidebarOpen((prev) => !prev);
+  };
 
   return (
     <Box sx={{ display: "flex" }}>
       <Header
-        handleDrawerToggle={handleDrawerToggle}
-        mode={mode}
-        toggleTheme={toggleTheme}
+        toggleSidebar={handleSidebarToggle}
+        sidebarOpen={sidebarOpen} // ⬅ add this
+        username="Bozlur Rosid Sagor"
+        darkMode={mode === "dark"}
+        toggleDarkMode={toggleTheme}
       />
 
       <Sidebar open={sidebarOpen} onToggle={handleSidebarToggle} />
@@ -42,10 +45,10 @@ export default function AdminLayout({ mode, toggleTheme }) {
           <BreadcrumbsNav />
         </Box>
 
-        {/* Page transitions using AnimatePresence */}
+        {/* Page transitions */}
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
-            key={location.pathname} // important: unique key per route for transitions
+            key={location.pathname}
             variants={mainVariants}
             initial="initial"
             animate="in"
