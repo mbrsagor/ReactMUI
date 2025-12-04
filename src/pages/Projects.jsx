@@ -1,10 +1,9 @@
 import React from 'react'
 
-export default function Products() {
+export default function Projects() {
   return (
     <div>
-      <h1>Products</h1>
+      <h1>Projects</h1>
     </div>
   );
 }
-

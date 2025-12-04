@@ -1,4 +1,5 @@
-import { AppBar, Toolbar, Typography, IconButton, Box } from "@mui/material";
+import React from "react";
+import { AppBar, Toolbar, IconButton, Typography, Box } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ThemeToggle from "./ThemeToggle";
 
@@ -6,12 +7,11 @@ export default function Header({ handleDrawerToggle, mode, toggleTheme }) {
   return (
     <AppBar position="fixed" sx={{ zIndex: 2000 }}>
       <Toolbar>
-        {/* Sidebar menu - mobile only */}
         <IconButton
           color="inherit"
           edge="start"
           onClick={handleDrawerToggle}
-          sx={{ mr: 2, display: { md: "none" } }}
+          sx={{ mr: 2 }}
         >
           <MenuIcon />
         </IconButton>
@@ -20,7 +20,9 @@ export default function Header({ handleDrawerToggle, mode, toggleTheme }) {
           Admin Panel
         </Typography>
 
-        <ThemeToggle mode={mode} toggleMode={toggleTheme} />
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <ThemeToggle mode={mode} toggleMode={toggleTheme} />
+        </Box>
       </Toolbar>
     </AppBar>
   );
