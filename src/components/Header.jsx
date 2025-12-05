@@ -15,6 +15,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 
+import "../style/header.scss";
+
 export default function Header({
   toggleSidebar,
   sidebarOpen,
@@ -29,53 +31,41 @@ export default function Header({
 
   return (
     <AppBar
-      elevation={0}
       position="fixed"
+      elevation={0}
       color="inherit"
-      sx={{
-        zIndex: (theme) => theme.zIndex.drawer + 1,
-        borderBottom: "1px solid #e0e0e0",
-        bgcolor: "background.paper",
-        transition: "all 0.3s ease",
-        ml: sidebarOpen ? "240px" : "64px",
-      }}
+      className={`header-wrapper ${
+        sidebarOpen ? "sidebar-open" : "sidebar-close"
+      }`}
     >
-      <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+      <Toolbar className="header-toolbar">
         {/* LEFT SECTION */}
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-          {/* Sidebar toggle button (always left) */}
-          <IconButton onClick={toggleSidebar}>
+        <Box className="header-left">
+          <IconButton className="sidebar-toggle-btn" onClick={toggleSidebar}>
             <MenuIcon />
           </IconButton>
 
-          {/* Logo or Title (ALWAYS visible) */}
-          <Typography
-            variant="h6"
-            sx={{ fontWeight: 600, whiteSpace: "nowrap" }}
-          >
+          <Typography variant="h6" className="header-title">
             RackinUP
           </Typography>
         </Box>
 
         {/* RIGHT SECTION */}
-        <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
-          {/* Dark/Light mode toggle */}
-          <IconButton onClick={toggleDarkMode}>
+        <Box className="header-right">
+          {/* Dark / Light Mode Toggle */}
+          <IconButton onClick={toggleDarkMode} className="theme-toggle-btn">
             {darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
           </IconButton>
 
-          {/* Avatar + Username */}
-          <Box
-            onClick={handleMenuOpen}
-            sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}
-          >
-            <Avatar alt={username} sx={{ mr: 1 }} />
-            <Typography variant="body1" sx={{ fontWeight: 600 }}>
+          {/* Avatar + Name */}
+          <Box className="profile-section" onClick={handleMenuOpen}>
+            <Avatar alt={username} className="profile-avatar" />
+            <Typography variant="body1" className="profile-name">
               {username}
             </Typography>
           </Box>
 
-          {/* Menu Dropdown */}
+          {/* Dropdown Menu */}
           <Menu
             anchorEl={anchorEl}
             open={Boolean(anchorEl)}
@@ -85,9 +75,7 @@ export default function Header({
           >
             <MenuItem onClick={handleMenuClose}>My Account</MenuItem>
             <MenuItem onClick={handleMenuClose}>Company Profile</MenuItem>
-
             <Divider />
-
             <MenuItem onClick={handleMenuClose}>Sign Out</MenuItem>
           </Menu>
         </Box>

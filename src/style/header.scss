@@ -1,0 +1,80 @@
+/* -----------------------------------------------------
+   HEADER LAYOUT
+------------------------------------------------------ */
+
+.header-wrapper {
+  border-bottom: 1px solid #e0e0e0;
+  background-color: var(--mui-background-paper);
+  transition: all 0.3s ease;
+
+  // When sidebar is open
+  &.sidebar-open {
+    margin-left: 240px;
+  }
+
+  // When sidebar is collapsed
+  &.sidebar-close {
+    margin-left: 64px;
+  }
+}
+
+/* Toolbar */
+.header-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* -------------------------------------------
+   LEFT SECTION
+-------------------------------------------- */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  .header-title {
+    font-weight: 600;
+    white-space: nowrap;
+  }
+}
+
+/* -------------------------------------------
+   RIGHT SECTION
+-------------------------------------------- */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+
+  .theme-toggle-btn {
+    padding: 6px;
+  }
+
+  .profile-section {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    .profile-avatar {
+      margin-right: 8px;
+    }
+
+    .profile-name {
+      font-weight: 600;
+      white-space: nowrap;
+    }
+  }
+}
+
+/* -------------------------------------------
+   RESPONSIVE
+-------------------------------------------- */
+@media (max-width: 900px) {
+  .header-wrapper {
+    &.sidebar-open,
+    &.sidebar-close {
+      margin-left: 0 !important; // Full-width header on mobile
+    }
+  }
+}
