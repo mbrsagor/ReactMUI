@@ -1,0 +1,89 @@
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+        "Segoe UI Symbol";
+    font-size: 14px;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body,
+#root {
+    height: 100%;
+}
+
+#__next {
+    height: 100%;
+}
+
+.MuiPaper-root {
+    box-shadow: none;
+}
+
+.MuiButton-root {
+    text-transform: none;
+}
+
+.MuiListItemButton-root:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+}
+
+.MuiListItemButton-root.Mui-selected {
+    background-color: rgba(0, 0, 0, 0.08);
+}
+
+.MuiListItemButton-root.Mui-selected:hover {
+    background-color: rgba(0, 0, 0, 0.12);
+}
+
+.MuiTableCell-root {
+    border-bottom: 1px solid rgba(224, 224, 224, 1);
+}
+
+.MuiTableCell-head {
+    font-weight: 600;
+}
+
+.MuiTableRow-root.Mui-selected {
+    background-color: rgba(0, 0, 0, 0.08);
+}
+
+.MuiTableRow-root.Mui-selected:hover {
+    background-color: rgba(0, 0, 0, 0.12);
+}
+
+.MuiPaginationItem-root.Mui-selected {
+    background-color: #1976d2;
+    color: #fff;
+}
+
+.MuiPaginationItem-root.Mui-selected:hover {
+    background-color: #115293;
+}
+
+.MuiChip-root {
+    font-weight: 600;
+}
+
+.MuiDialog-paper {
+    border-radius: 8px;
+}
+
+.MuiTooltip-tooltip {
+    font-size: 13px;
+}
+.MuiTooltip-arrow {
+    color: rgba(97, 97, 97, 0.9);
+}
+
+.MuiTooltip-tooltip.MuiTooltip-tooltipPlacementTop {
+    margin-bottom: 8px;
+}

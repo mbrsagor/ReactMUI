@@ -1,0 +1,70 @@
+@use './style' as *;
+
+/* -----------------------------------------------------
+   AUTH LAYOUT STYLES
+   Handles the left branding section + right form section
+------------------------------------------------------ */
+
+.auth-layout {
+  min-height: 100vh;
+  display: flex;
+  overflow: hidden;
+}
+
+/* -------------------------------------------
+   LEFT BRANDING AREA (Desktop Only)
+-------------------------------------------- */
+.left-side-box {
+  width: 45%;
+  background: linear-gradient(135deg, #4c00ff 0%, #090979 100%);
+  color: #fff;
+  padding: 24px; // MUI p={6} (6 * 4px)
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+
+  // Text styling - optional enhancements
+  h3 {
+    font-weight: 800;
+    margin-bottom: 12px;
+  }
+
+  h6 {
+    opacity: 0.8;
+    margin-bottom: 24px;
+  }
+
+  /* -------------------------------------------
+     Responsive — Hide on mobile/tablet
+     Matches MUI md breakpoint (900px)
+  -------------------------------------------- */
+  @media (max-width: 900px) {
+    display: none;
+    width: 0%;
+    padding: 0;
+  }
+}
+
+/* -------------------------------------------
+   RIGHT FORM AREA
+-------------------------------------------- */
+.right-form-area {
+  flex-grow: 1;
+  background: #fff;
+  padding: 24px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .form-container {
+    width: 100%;
+    max-width: 420px;
+  }
+
+  // Desktop padding
+  @media (min-width: 900px) {
+    padding: 64px;
+  }
+}

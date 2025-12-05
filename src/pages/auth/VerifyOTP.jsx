@@ -6,6 +6,7 @@ import AuthLayout from "../../layout/AuthLayout";
 
 export default function VerifyOTP() {
   const navigate = useNavigate();
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const inputs = [...Array(4)].map(() => useRef());
 
   const handleChange = (e, index) => {
