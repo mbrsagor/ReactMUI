@@ -43,14 +43,7 @@ export default function VerifyOTP() {
       </Box>
 
       <Button
-        fullWidth
-        sx={{
-          py: 1.4,
-          fontWeight: 700,
-          background: "#4C00FF",
-          color: "#fff",
-          borderRadius: "10px",
-        }}
+        className="submit-button"
         onClick={() => navigate("/")}
       >
         Verify & Continue

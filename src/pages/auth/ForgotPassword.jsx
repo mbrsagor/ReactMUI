@@ -18,21 +18,14 @@ export default function ForgotPassword() {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          navigate("/auth/verify");
+          navigate("/auth/verify-otp");
         }}
       >
         <TextField label="Email Address" fullWidth sx={{ mb: 3 }} />
 
         <Button
           type="submit"
-          fullWidth
-          sx={{
-            py: 1.4,
-            fontWeight: 700,
-            background: "#4C00FF",
-            color: "#fff",
-            borderRadius: "10px",
-          }}
+          className="submit-button"
         >
           Send Code
         </Button>
