@@ -1,39 +1,42 @@
 import React from "react";
-import { Box, Card, TextField, Button, Typography } from "@mui/material";
+import { TextField, Button, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import AuthLayout from "../../layout/AuthLayout";
 
 export default function ForgotPassword() {
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    navigate("/auth/verify-otp");
-  };
-
   return (
-    <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      minHeight="100vh"
-    >
-      <Card sx={{ p: 4, width: 380 }}>
-        <Typography variant="h5" mb={2} align="center">
-          Forgot Password
-        </Typography>
+    <AuthLayout>
+      <Typography variant="h4" sx={{ fontWeight: 700, mb: 1 }}>
+        Forgot Password
+      </Typography>
+      <Typography variant="body2" sx={{ color: "#666", mb: 4 }}>
+        Enter your email to receive a 4-digit verification code.
+      </Typography>
 
-        <Typography variant="body2" mb={2}>
-          Enter your email. We'll send a 4-digit verification code.
-        </Typography>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          navigate("/auth/verify");
+        }}
+      >
+        <TextField label="Email Address" fullWidth sx={{ mb: 3 }} />
 
-        <form onSubmit={handleSubmit}>
-          <TextField label="Email" fullWidth margin="normal" required />
-
-          <Button type="submit" fullWidth variant="contained" sx={{ mt: 2 }}>
-            Send OTP
-          </Button>
-        </form>
-      </Card>
-    </Box>
+        <Button
+          type="submit"
+          fullWidth
+          sx={{
+            py: 1.4,
+            fontWeight: 700,
+            background: "#4C00FF",
+            color: "#fff",
+            borderRadius: "10px",
+          }}
+        >
+          Send Code
+        </Button>
+      </form>
+    </AuthLayout>
   );
 }
