@@ -1,0 +1,82 @@
+/* -----------------------------------------------------
+   ADMIN LAYOUT STYLES
+   Handles the main layout grid, sidebar behavior,
+   content spacing, and responsive adjustments.
+------------------------------------------------------ */
+
+/* ROOT WRAPPER */
+.admin-layout {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  background: var(--bg-main, #f5f6fa); // optional
+}
+
+/* -----------------------------------------------------
+   SIDEBAR STYLES (optional wrapper if needed)
+------------------------------------------------------ */
+.sidebar-wrapper {
+  transition: all 0.3s ease;
+
+  /* When sidebar is collapsed */
+  &.collapsed {
+    width: 70px;
+  }
+
+  /* When sidebar is expanded */
+  &.expanded {
+    width: 250px;
+  }
+
+  /* Mobile responsiveness */
+  @media (max-width: 900px) {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    z-index: 1200;
+    background: #fff;
+
+    &.hidden {
+      transform: translateX(-100%);
+    }
+
+    &.visible {
+      transform: translateX(0);
+    }
+
+    transition: transform 0.3s ease;
+  }
+}
+
+/* -----------------------------------------------------
+   MAIN CONTENT AREA
+------------------------------------------------------ */
+.admin-main {
+  flex-grow: 1;
+  padding: 24px;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  /* Toolbar spacing (from MUI Header) */
+  .mui-toolbar {
+    margin-bottom: 20px;
+  }
+
+  /* Breadcrumb container */
+  .breadcrumbs-container {
+    margin-bottom: 16px;
+  }
+
+  /* Page Transition Wrapper (Framer Motion) */
+  .page-transition {
+    width: 100%;
+  }
+
+  /* Larger screen padding */
+  @media (min-width: 900px) {
+    padding: 32px;
+  }
+}

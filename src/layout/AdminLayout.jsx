@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import BreadcrumbsNav from "../components/BreadcrumbsNav";
+import "../style/adminLayout.scss";
 
 const mainVariants = {
   initial: { opacity: 0, y: 8 },
@@ -20,41 +21,38 @@ export default function AdminLayout({ mode, toggleTheme }) {
   const [sidebarOpen, setSidebarOpen] = React.useState(true);
   const location = useLocation();
 
-  // Sidebar open/close
-  const handleSidebarToggle = () => {
-    setSidebarOpen((prev) => !prev);
-  };
+  const handleSidebarToggle = () => setSidebarOpen((prev) => !prev);
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box className="admin-layout">
       <Header
         toggleSidebar={handleSidebarToggle}
-        sidebarOpen={sidebarOpen} // ⬅ add this
+        sidebarOpen={sidebarOpen}
         username="Bozlur Rosid Sagor"
         darkMode={mode === "dark"}
         toggleDarkMode={toggleTheme}
       />
 
+      {/* SIDEBAR */}
       <Sidebar open={sidebarOpen} onToggle={handleSidebarToggle} />
 
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        <Toolbar />
+      {/* MAIN CONTENT */}
+      <Box component="main" className="admin-main">
+        <Toolbar className="mui-toolbar" />
 
-        {/* Breadcrumbs */}
-        <Box sx={{ mb: 2 }}>
+        <Box className="breadcrumbs-container">
           <BreadcrumbsNav />
         </Box>
 
-        {/* Page transitions */}
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={location.pathname}
+            className="page-transition"
             variants={mainVariants}
             initial="initial"
             animate="in"
             exit="out"
             transition={transition}
-            style={{ width: "100%" }}
           >
             <Outlet />
           </motion.div>
