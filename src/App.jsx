@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 
+import ProtectedRoute from "./services/ProtectedRoute";
 import AdminLayout from "./layout/AdminLayout";
 import Dashboard from "./pages/Dashboard";
 import Projects from "./pages/Projects";
@@ -40,7 +41,7 @@ export default function App() {
             path="/"
             element={<AdminLayout mode={mode} toggleTheme={toggleTheme} />}
           >
-            <Route index element={<Dashboard />} />
+            <Route index element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
 
             <Route path="projects">
               <Route index element={<Projects />} />

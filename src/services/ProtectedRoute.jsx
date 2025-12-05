@@ -5,7 +5,7 @@ import { isAuthenticated } from "./auth"; // Import the authentication helper
 const ProtectedRoute = ({ children }) => {
  // console.log("Is Authenticated:", isAuthenticated()); // Debugging
   if (!isAuthenticated()) {
-    return <Navigate to="/signin" replace />;
+    return <Navigate to="/auth" replace />;
   }
   return children;
 };
