@@ -14,6 +14,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
+import { useNavigate } from "react-router-dom";
 
 import "../style/header.scss";
 
@@ -28,6 +29,20 @@ export default function Header({
 
   const handleMenuOpen = (event) => setAnchorEl(event.currentTarget);
   const handleMenuClose = () => setAnchorEl(null);
+
+  // Navigate to to sign in page
+  const navigate = useNavigate();
+
+  // Sign out without API call remove token from localStorage
+  const handlerSignOut = async () => {
+    localStorage.removeItem("token");
+    localStorage.clear();
+
+    // Navigate after state update
+    setTimeout(() => {
+      navigate("/auth/");
+    }, 100);
+  };
 
   return (
     <AppBar
@@ -75,9 +90,9 @@ export default function Header({
             transformOrigin={{ vertical: "top", horizontal: "right" }}
           >
             <MenuItem onClick={handleMenuClose}>My Account</MenuItem>
-            <MenuItem onClick={handleMenuClose}>Company Profile</MenuItem>
+            <MenuItem onClick={handleMenuClose}>Settings</MenuItem>
             <Divider />
-            <MenuItem onClick={handleMenuClose}>Sign Out</MenuItem>
+            <MenuItem onClick={handlerSignOut}>Sign Out</MenuItem>
           </Menu>
         </Box>
       </Toolbar>

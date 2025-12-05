@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Toolbar } from "@mui/material";
 import { Outlet, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
@@ -7,6 +7,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import BreadcrumbsNav from "../components/BreadcrumbsNav";
+import { profileURL } from "../services/api_services";
+import axios from "../services/axiosConfig";
 import "../style/adminLayout.scss";
 
 const mainVariants = {
@@ -18,17 +20,31 @@ const mainVariants = {
 const transition = { duration: 0.25, ease: "easeInOut" };
 
 export default function AdminLayout({ mode, toggleTheme }) {
+  // SIDEBAR STATE
+  const [user, setUser] = useState(null);
   const [sidebarOpen, setSidebarOpen] = React.useState(true);
   const location = useLocation();
 
   const handleSidebarToggle = () => setSidebarOpen((prev) => !prev);
+
+  // fetch profile info
+  useEffect(() => {
+    axios
+      .get(profileURL)
+      .then((res) => {
+        const profile_data = res.data.data;
+        setUser({ ...profile_data });
+        // console.log(res.data.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <Box className="admin-layout">
       <Header
         toggleSidebar={handleSidebarToggle}
         sidebarOpen={sidebarOpen}
-        username="Bozlur Rosid Sagor"
+        username={user?.fullname || "User"}
         darkMode={mode === "dark"}
         toggleDarkMode={toggleTheme}
       />

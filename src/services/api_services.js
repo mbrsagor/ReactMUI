@@ -24,7 +24,6 @@ export const user = `${endpoint}/user`;
 
 // Auth endpoints
 export const sentOTPEndpoint = `${user}/sent-otp/`;
-export const resetPasswordSentOTPEndpoint = `${user}/reset-password-otp/`;
-export const reSentOTPEndpoint = `${user}/resent-otp/`;
 export const verifyOTPEndpoint = `${user}/verify-otp/`;
 export const signInAPIEndpoint = `${user}/signin/`;
+export const profileURL = `${user}/profile/`;
