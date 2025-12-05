@@ -12,6 +12,11 @@ import Products from "./pages/Products";
 import ProductCreate from "./pages/ProductCreate";
 import Users from "./pages/Users";
 import Settings from "./pages/Settings";
+
+import SignIn from "./pages/auth/SignIn";
+import ForgotPassword from "./pages/auth/ForgotPassword";
+import VerifyOTP from "./pages/auth/VerifyOTP";
+
 import { createCustomTheme } from "./theme/theme";
 
 export default function App() {
@@ -23,6 +28,14 @@ export default function App() {
       <CssBaseline />
       <BrowserRouter>
         <Routes>
+          {/* AUTH ROUTES */}
+          <Route path="/auth">
+            <Route index element={<SignIn />} />
+            <Route path="forgot" element={<ForgotPassword />} />
+            <Route path="verify-otp" element={<VerifyOTP />} />
+          </Route>
+
+          {/* ADMIN ROUTES */}
           <Route
             path="/"
             element={<AdminLayout mode={mode} toggleTheme={toggleTheme} />}
