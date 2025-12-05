@@ -34,6 +34,7 @@ export default function Header({
       position="fixed"
       elevation={0}
       color="inherit"
+      sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
       className={`header-wrapper ${
         sidebarOpen ? "sidebar-open" : "sidebar-close"
       }`}
