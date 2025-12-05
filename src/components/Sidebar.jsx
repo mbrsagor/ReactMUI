@@ -80,14 +80,14 @@ export default function Sidebar({ open, onToggle }) {
       variant="permanent"
       PaperProps={{
         sx: {
+          bgcolor: "background.paper",
+          color: "text.primary",
           width: open ? drawerExpandedWidth : drawerCollapsedWidth,
           transition: (theme) =>
             theme.transitions.create("width", {
               easing: theme.transitions.easing.sharp,
               duration: theme.transitions.duration.standard,
             }),
-          overflowX: "hidden",
-          boxSizing: "border-box",
         },
       }}
       sx={{
