@@ -4,9 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import PersonIcon from "@mui/icons-material/Person";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
-import LayersIcon from "@mui/icons-material/Layers";
 import InventoryIcon from "@mui/icons-material/Inventory";
-import CategoryIcon from "@mui/icons-material/Category";
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import BusinessIcon from "@mui/icons-material/Business";
@@ -14,6 +12,7 @@ import BusinessIcon from "@mui/icons-material/Business";
 // API Services
 import { SuperAdminDashboardEndpoint } from "../../services/api_services";
 import axios from "../../services/axiosConfig";
+import "../../style/dashboard.scss";
 
 export default function Dashboard() {
   // State management model for dashboard metrics
@@ -55,7 +54,7 @@ export default function Dashboard() {
       link: "/users",
     },
     {
-      title: "Active Users",
+      title: "Total Active Users",
       value: countActiveUsers,
       icon: <PeopleAltIcon />,
       link: "/users",
@@ -67,7 +66,7 @@ export default function Dashboard() {
       link: "/services",
     },
     {
-      title: "Project Submissions",
+      title: "Total Projects",
       value: totalSubmissions,
       icon: <AssignmentTurnedInIcon />,
       link: "/submissions",
@@ -92,7 +91,7 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <Box sx={{ p: 2 }}>
+    <Box>
       <Grid container spacing={2}>
         {(loading ? Array.from(new Array(8)) : cardData).map((item, idx) => (
           <Grid item xs={12} sm={4} md={3} key={idx}>
@@ -105,61 +104,18 @@ export default function Dashboard() {
               />
             ) : (
               <Paper
+                className="dashboard-card"
                 elevation={0}
                 onClick={() => navigate(item.link)}
-                sx={{
-                  p: 2,
-                  borderRadius: 2,
-                  height: 160,
-                  cursor: "pointer",
-                  border: "1px solid #E3E3E3",
-                  transition: "all .25s ease",
-                  background: "#fff",
-                  "&:hover": {
-                    transform: "translateY(-4px)",
-                    boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
-                    borderColor: "#d6d6d6",
-                  },
-                }}
               >
-                {/* Top */}
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <Typography sx={{ fontSize: 15, fontWeight: 600 }}>
-                    {item.title}
-                  </Typography>
-                  <Box sx={{ fontSize: 24, color: "#333" }}>{item.icon}</Box>
-                </Box>
+                <div className="top">
+                  <p className="title">{item.title}</p>
+                  <span className="icon">{item.icon}</span>
+                </div>
 
-                {/* Number */}
-                <Typography
-                  sx={{
-                    fontSize: 28,
-                    fontWeight: 700,
-                    mt: 1,
-                    color: "#111",
-                  }}
-                >
-                  {item.value}
-                </Typography>
+                <h2 className="value">{item.value}</h2>
 
-                {/* View Details */}
-                <Typography
-                  sx={{
-                    mt: 1,
-                    fontSize: 14,
-                    fontWeight: 500,
-                    color: "#0056D2",
-                    textDecoration: "underline",
-                  }}
-                >
-                  View Details
-                </Typography>
+                <p className="details">View Details</p>
               </Paper>
             )}
           </Grid>

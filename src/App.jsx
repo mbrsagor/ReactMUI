@@ -11,7 +11,7 @@ import ProjectCreate from "./pages/ProjectCreate";
 import ArchivedProjects from "./pages/ArchivedProjects";
 import Products from "./pages/Products";
 import ProductCreate from "./pages/ProductCreate";
-import Users from "./pages/Users";
+import Users from "./pages/users/Users";
 import Settings from "./pages/Settings";
 
 import SignIn from "./pages/auth/SignIn";
