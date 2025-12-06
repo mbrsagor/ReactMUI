@@ -5,7 +5,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 
 import ProtectedRoute from "./services/ProtectedRoute";
 import AdminLayout from "./layout/AdminLayout";
-import Dashboard from "./pages/Dashboard";
+import Dashboard from "./pages/dashboard/Dashboard";
 import Projects from "./pages/Projects";
 import ProjectCreate from "./pages/ProjectCreate";
 import ArchivedProjects from "./pages/ArchivedProjects";
