@@ -68,20 +68,18 @@ export default function Users() {
     try {
       await axios.delete(userUpdateDeleteEndpoint(userToDelete.id));
       setUsers((prev) => prev.filter((u) => u.id !== userToDelete.id));
-      console.log("User deleted");
     } catch {
       console.error("Delete failed");
     }
     setShowDeleteModal(false);
   };
 
-  // Send Reset Link
+  // Send Password Reset Link
   const handleSendLinkConfirm = async () => {
     try {
       await axios.post(sentLinkToChangePassword, {
         email: userToSendLink.email,
       });
-      console.log("Reset link sent");
     } catch {
       console.error("Sending failed");
     }
@@ -89,15 +87,43 @@ export default function Users() {
   };
 
   return (
-    <Box p={2}>
-      {/* Page Title */}
-      
-
-      {/* Table Wrapper */}
-      <Grid container>
-        <Grid item xs={12}>
-          <TableContainer component={Paper} sx={{ borderRadius: 3 }}>
-            <Table>
+    <Box
+      p={2}
+      sx={{
+        width: "100% !important",
+        maxWidth: "100% !important",
+        overflowX: "hidden",
+      }}
+    >
+      <Grid
+        container
+        sx={{
+          width: "100% !important",
+          maxWidth: "100% !important",
+        }}
+      >
+        <Grid
+          item
+          xs={12}
+          sx={{
+            width: "100% !important",
+            maxWidth: "100% !important",
+          }}
+        >
+          <TableContainer
+            component={Paper}
+            sx={{
+              borderRadius: 3,
+              width: "100% !important",
+              maxWidth: "100% !important",
+            }}
+          >
+            <Table
+              sx={{
+                width: "100% !important",
+                tableLayout: "auto",
+              }}
+            >
               <TableHead>
                 <TableRow>
                   <TableCell>Name</TableCell>
@@ -201,6 +227,7 @@ export default function Users() {
             display="flex"
             justifyContent="center"
             gap={2}
+            sx={{ width: "100%" }}
           >
             <Button
               variant="outlined"
@@ -233,7 +260,7 @@ export default function Users() {
         )}
       </Grid>
 
-      {/* DELETE MODAL */}
+      {/* Delete Modal */}
       <Modal open={showDeleteModal} onClose={() => setShowDeleteModal(false)}>
         <Box className="mui-modal">
           <Typography variant="h6" fontWeight={700}>
@@ -257,7 +284,7 @@ export default function Users() {
         </Box>
       </Modal>
 
-      {/* SEND LINK MODAL */}
+      {/* Send Link Modal */}
       <Modal
         open={showSendLinkModal}
         onClose={() => setShowSendLinkModal(false)}

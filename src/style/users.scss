@@ -9,3 +9,16 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+* {
+  max-width: 100% !important;
+}
+
+.page-content,
+.wrapper,
+.content-area,
+.main-content,
+.container {
+  width: 100% !important;
+  max-width: 100% !important;
+}
