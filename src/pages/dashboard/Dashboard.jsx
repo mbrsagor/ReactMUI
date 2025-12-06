@@ -11,52 +11,76 @@ import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import BusinessIcon from "@mui/icons-material/Business";
 
+// API Services
+import { SuperAdminDashboardEndpoint } from "../../services/api_services";
+import axios from "../../services/axiosConfig";
+
 export default function Dashboard() {
+  // State management model for dashboard metrics
+  const [totalUser, setTotalUser] = useState(0);
+  const [totalCompany, setTotalCompany] = useState(0);
+  const [countActiveUsers, setCountActiveUsers] = useState(0);
+  const [totalServices, setTotalServices] = useState(0);
+  const [totalSubmissions, setTotalSubmissions] = useState(0);
+  const [totalTransactions, setTotalTransactions] = useState(0);
+
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
 
+  // Fetch dashboard data
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const response = await axios.get(SuperAdminDashboardEndpoint);
+        setTotalUser(response.data.data.total_users || 0);
+        setCountActiveUsers(response.data.data.total_active_users || 0);
+        setTotalCompany(response.data.data.total_companies || 0);
+        setTotalServices(response.data.data.total_services || 0);
+        setTotalSubmissions(response.data.data.total_submissions || 0);
+        setTotalTransactions(response.data.data.total_transactions || 0);
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
+
   // Dummy data / Replace with API later
   const cardData = [
-    { title: "Total Users", value: 5, icon: <PersonIcon />, link: "/users" },
+    {
+      title: "Total Users",
+      value: totalUser,
+      icon: <PersonIcon />,
+      link: "/users",
+    },
     {
       title: "Active Users",
-      value: 5,
+      value: countActiveUsers,
       icon: <PeopleAltIcon />,
       link: "/users",
     },
     {
-      title: "Service Type",
-      value: 0,
-      icon: <LayersIcon />,
-      link: "/service-type",
-    },
-    {
       title: "Total Services",
-      value: 1,
+      value: totalServices,
       icon: <InventoryIcon />,
       link: "/services",
     },
     {
-      title: "Total Categories",
-      value: 0,
-      icon: <CategoryIcon />,
-      link: "/categories",
-    },
-    {
-      title: "Total Submissions",
-      value: 3,
+      title: "Project Submissions",
+      value: totalSubmissions,
       icon: <AssignmentTurnedInIcon />,
       link: "/submissions",
     },
     {
       title: "Total Transactions",
-      value: 5,
+      value: totalTransactions,
       icon: <MonetizationOnIcon />,
       link: "/transactions",
     },
     {
       title: "Total Companies",
-      value: 1,
+      value: totalCompany,
       icon: <BusinessIcon />,
       link: "/companies",
     },

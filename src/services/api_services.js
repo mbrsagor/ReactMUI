@@ -21,9 +21,13 @@ export const endpoint = `${BASE_URL}${apiURL}`;
 // Here using Django and the backend framework every single module connect as a app
 // App main endpoint
 export const user = `${endpoint}/user`;
+export const catalogue = `${endpoint}/catalogue`;
 
 // Auth endpoints
 export const sentOTPEndpoint = `${user}/sent-otp/`;
 export const verifyOTPEndpoint = `${user}/verify-otp/`;
 export const signInAPIEndpoint = `${user}/signin/`;
 export const profileURL = `${user}/profile/`;
+
+// Catalogue endpoints
+export const SuperAdminDashboardEndpoint = `${catalogue}/dashboard/super-admin/`;
