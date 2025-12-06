@@ -28,6 +28,11 @@ export const sentOTPEndpoint = `${user}/sent-otp/`;
 export const verifyOTPEndpoint = `${user}/verify-otp/`;
 export const signInAPIEndpoint = `${user}/signin/`;
 export const profileURL = `${user}/profile/`;
+export const userListEndpoint = `${user}/users/`;
+export const sentLinkToChangePassword = `${user}/sent-link-to-change-password/`;
+export const userUpdateDeleteEndpoint = (id) => `${user}/user/${id}/`;
+export const createListEndpoint = `${user}/cerate-tier/`;
+export const tierUpdateDeleteEndpoint = (id) => `${user}/tier/${id}/`;
 
 // Catalogue endpoints
 export const SuperAdminDashboardEndpoint = `${catalogue}/dashboard/super-admin/`;
