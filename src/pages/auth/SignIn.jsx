@@ -90,6 +90,7 @@ export default function SignIn() {
           label="Email Address"
           fullWidth
           variant="outlined"
+          placeholder="Enter your email address"
           onChange={(event) => setEmail(event.target.value)}
           sx={{ mb: 3 }}
         />
@@ -99,6 +100,7 @@ export default function SignIn() {
           fullWidth
           variant="outlined"
           type={showPass ? "text" : "password"}
+          placeholder="Enter your password"
           onChange={(event) => setPassword(event.target.value)}
           sx={{ mb: 2 }}
           InputProps={{

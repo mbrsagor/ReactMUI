@@ -88,7 +88,6 @@ export default function Users() {
 
   return (
     <Box
-      p={2}
       sx={{
         width: "100% !important",
         maxWidth: "100% !important",
@@ -238,13 +237,9 @@ export default function Users() {
             </Button>
 
             <Box
+              className="pagination_page_indicator"
               px={2}
               py={1}
-              sx={{
-                border: "1px solid #ddd",
-                borderRadius: 2,
-                fontWeight: 600,
-              }}
             >
               Page {currentPage}
             </Box>
