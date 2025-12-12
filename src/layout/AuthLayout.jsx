@@ -9,7 +9,7 @@ export default function AuthLayout({ children }) {
       <Box className="left-side-box">
         <Typography variant="h3">RackinUP LLC</Typography>
         <Typography variant="h6">
-          The modern dashboard platform for managing your business.
+          Empowering Your Business with Digital Solutions
         </Typography>
       </Box>
 

@@ -34,7 +34,6 @@ export default function AdminLayout({ mode, toggleTheme }) {
       .then((res) => {
         const profile_data = res.data.data;
         setUser({ ...profile_data });
-        // console.log(res.data.data);
       })
       .catch((err) => console.log(err));
   }, []);
