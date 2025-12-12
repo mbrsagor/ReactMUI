@@ -14,9 +14,11 @@ import ProductCreate from "./pages/ProductCreate";
 import Users from "./pages/users/Users";
 import Settings from "./pages/Settings";
 
+// AUTH ROUTES
 import SignIn from "./pages/auth/SignIn";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import VerifyOTP from "./pages/auth/VerifyOTP";
+import ChangePassword from "./pages/auth/ChnagePassword";
 
 import { createCustomTheme } from "./theme/theme";
 
@@ -34,6 +36,7 @@ export default function App() {
             <Route index element={<SignIn />} />
             <Route path="forgot" element={<ForgotPassword />} />
             <Route path="verify-otp" element={<VerifyOTP />} />
+            <Route path="change-password" element={<ChangePassword />} />
           </Route>
 
           {/* ADMIN ROUTES */}
