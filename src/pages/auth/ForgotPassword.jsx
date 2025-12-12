@@ -41,9 +41,8 @@ export default function ForgotPassword() {
       });
 
       if (response.data.status === "success") {
-        navigate("/reset-password-verify-otp", { state: email });
+        navigate("/auth/verify-otp", { state: email });
       } else {
-        // toast.error(response.data.message);
         setSnackbar({
           open: true,
           message: response.data.message,
