@@ -1,75 +1,75 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Box, TextField, Button, Typography, Snackbar, Alert } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import AuthLayout from "../../layout/AuthLayout";
-
 import axios from "axios";
 import { verifyOTPEndpoint, reSentOTPEndpoint } from "../../services/api_services";
 
 export default function VerifyOTP() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState(location.state || "Unknown Phone");
+  const location = useLocation();
+
+  const [email] = useState(location.state || "Unknown Email");
   const [otp, setOtp] = useState(["", "", "", ""]);
   const [loading, setLoading] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(30); // 90 seconds countdown
+  const [timeLeft, setTimeLeft] = useState(30);
   const [canResend, setCanResend] = useState(false);
-  
-  // Snackbar state
+
+  // Snackbar State
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
     severity: "success",
   });
 
-  // Handle snackbar close
-  const handleSnackbarClose = () => {
-    setSnackbar({ ...snackbar, open: false });
-  };
+  const inputRefs = useRef([]);
 
-  // Inside the component:
-  const otpRefs = useRef([]);
-
-  // Countdown logic
+  // ------------ Countdown Logic ------------
   useEffect(() => {
-    if (timeLeft <= 0) {
+    if (timeLeft === 0) {
       setCanResend(true);
       return;
     }
+
     const timer = setInterval(() => {
       setTimeLeft((prev) => prev - 1);
     }, 1000);
+
     return () => clearInterval(timer);
   }, [timeLeft]);
 
-  // Format seconds into mm:ss
+  // Format time into mm:ss
   const formatTime = (seconds) => {
     const m = String(Math.floor(seconds / 60)).padStart(2, "0");
     const s = String(seconds % 60).padStart(2, "0");
     return `${m}:${s}`;
   };
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const inputs = [...Array(4)].map(() => useRef());
-
-  // change handler
+  // ------------ OTP Input Change Handler ------------
   const handleChange = (e, index) => {
-    if (e.target.value && index < 3) inputs[index + 1].current.focus();
-    if (!e.target.value && index > 0) inputs[index - 1].current.focus();
+    const value = e.target.value.replace(/[^0-9]/g, ""); // only digits
+
+    let updatedOtp = [...otp];
+    updatedOtp[index] = value;
+    setOtp(updatedOtp);
+
+    if (value && index < 3) inputRefs.current[index + 1].focus();
+    if (!value && index > 0) inputRefs.current[index - 1].focus();
   };
 
-  // Resend OTP handler
+  // ------------ Resend OTP ------------
   const handleResendOtp = async () => {
     setLoading(true);
     try {
-      const response = await axios.post(reSentOTPEndpoint, {
-        email,
-      });
+      const response = await axios.post(reSentOTPEndpoint, { email });
+
       if (response.data.status === "success") {
         setSnackbar({
           open: true,
           message: response.data.message,
           severity: "success",
         });
+
         setTimeLeft(30);
         setCanResend(false);
       } else {
@@ -82,7 +82,7 @@ export default function VerifyOTP() {
     } catch (err) {
       setSnackbar({
         open: true,
-        message: err.response?.data?.message,
+        message: err.response?.data?.message || "Error sending OTP",
         severity: "error",
       });
     } finally {
@@ -90,18 +90,28 @@ export default function VerifyOTP() {
     }
   };
 
-  // Handle form submission
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    setLoading(true);
-    // Concatenate OTP into a single string
+  // ------------ Verify OTP ------------
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     const otpString = otp.join("");
-    // Verify OTP API integration start from here...
+
+    if (otpString.length < 4) {
+      setSnackbar({
+        open: true,
+        message: "Please enter a valid 4-digit OTP.",
+        severity: "error",
+      });
+      return;
+    }
+
+    setLoading(true);
+
     try {
       const response = await axios.post(verifyOTPEndpoint, {
-        email, // Payload sent to the backend
-        otp: otpString, // Send concatenated OTP string
+        email,
+        otp: otpString,
       });
+
       if (response.data.status === "success") {
         navigate("/change-password", { state: email });
       } else {
@@ -114,7 +124,7 @@ export default function VerifyOTP() {
     } catch (err) {
       setSnackbar({
         open: true,
-        message: err.response?.data?.message,
+        message: err.response?.data?.message || "Verification failed",
         severity: "error",
       });
     } finally {
@@ -124,56 +134,77 @@ export default function VerifyOTP() {
 
   return (
     <AuthLayout>
-      <Typography variant="h4" sx={{ fontWeight: 700, mb: 2 }}>
+      <Typography variant="h4" sx={{ fontWeight: 700, mb: 1 }}>
         Verify Code
       </Typography>
+
       <Typography variant="body2" sx={{ color: "#666", mb: 4 }}>
         Enter the 4-digit code sent to your email.
       </Typography>
 
-      <Box display="flex" justifyContent="center" gap={2} mb={4}>
-        {inputs.map((ref, idx) => (
+      {/* OTP Boxes */}
+      <Box display="flex" justifyContent="center" gap={2} mb={3}>
+        {[0, 1, 2, 3].map((i) => (
           <TextField
-            key={idx}
-            inputRef={ref}
-            value={otp[idx]}
+            key={i}
+            inputRef={(el) => (inputRefs.current[i] = el)}
+            value={otp[i]}
+            onChange={(e) => handleChange(e, i)}
             variant="outlined"
             inputProps={{
               maxLength: 1,
               style: {
                 textAlign: "center",
-                fontSize: "22px",
+                fontSize: "24px",
                 width: "55px",
               },
             }}
-            onChange={(e) => handleChange(e, idx)}
           />
         ))}
       </Box>
 
-      <Box>
+      {/* Timer + Resend */}
+      <Box textAlign="center" mb={2}>
         <Typography variant="body2" sx={{ color: "#666" }}>
           Expires in {formatTime(timeLeft)}
         </Typography>
+
         {canResend ? (
           <Typography
-            className="mb-0 mt-1 resent_otp_text cursor-pointer"
             onClick={handleResendOtp}
+            sx={{
+              mt: 1,
+              cursor: "pointer",
+              color: "primary.main",
+              fontWeight: 600,
+            }}
           >
             Didn’t get it? Resend OTP
           </Typography>
         ) : (
-          <Typography className="mb-0 mt-1">Sending... OTP</Typography>
+          <Typography sx={{ mt: 1, color: "#999" }}>Waiting for OTP...</Typography>
         )}
       </Box>
 
+      {/* Submit */}
       <Button
-        className="submit-button"
+        fullWidth
+        variant="contained"
         onClick={handleSubmit}
         disabled={loading}
+        sx={{ mt: 2, py: 1.3 }}
       >
-        {loading ? "Verify & processing..." : "Verify & Continue"}
+        {loading ? "Verifying..." : "Verify & Continue"}
       </Button>
+
+      {/* Snackbar */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+      >
+        <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
+      </Snackbar>
     </AuthLayout>
   );
 }
