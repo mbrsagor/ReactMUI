@@ -33,6 +33,7 @@ export const sentLinkToChangePassword = `${user}/sent-link-to-change-password/`;
 export const userUpdateDeleteEndpoint = (id) => `${user}/user/${id}/`;
 export const createListEndpoint = `${user}/cerate-tier/`;
 export const tierUpdateDeleteEndpoint = (id) => `${user}/tier/${id}/`;
+export const resetPasswordSentOTPEndpoint = `${user}/reset-password-otp/`;
 
 // Catalogue endpoints
 export const SuperAdminDashboardEndpoint = `${catalogue}/dashboard/super-admin/`;

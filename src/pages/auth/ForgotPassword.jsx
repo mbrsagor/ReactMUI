@@ -1,10 +1,67 @@
-import React from "react";
-import { TextField, Button, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { TextField, Button, Typography, Snackbar, Alert } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import AuthLayout from "../../layout/AuthLayout";
 
+import axios from "axios";
+import { resetPasswordSentOTPEndpoint } from "../../services/api_services";
+
 export default function ForgotPassword() {
+  // Form state
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  // Snackbar state
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+
+  // OnChange handler
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  // Handle snackbar close
+  const handleSnackbarClose = () => {
+    setSnackbar({ ...snackbar, open: false });
+  };
+
+  // Submit handler
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setLoading(true);
+
+    // You can send the OTP to the entered email address here
+    try {
+      const response = await axios.post(resetPasswordSentOTPEndpoint, {
+        email: email, // Payload sent to the backend
+      });
+
+      if (response.data.status === "success") {
+        navigate("/reset-password-verify-otp", { state: email });
+      } else {
+        // toast.error(response.data.message);
+        setSnackbar({
+          open: true,
+          message: response.data.message,
+          severity: "error",
+        });
+      }
+    } catch (error) {
+      const msg = error.response?.data?.message || "Something went wrong.";
+      setSnackbar({
+        open: true,
+        message: msg,
+        severity: "error",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   return (
     <AuthLayout>
@@ -16,20 +73,39 @@ export default function ForgotPassword() {
       </Typography>
 
       <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          navigate("/auth/verify-otp");
-        }}
+        onSubmit={handleSubmit}
       >
-        <TextField label="Email Address" fullWidth sx={{ mb: 3 }} />
+        <TextField
+          type="email"
+          required
+          value={email}
+          onChange={handleEmailChange}
+          label="Email Address" fullWidth sx={{ mb: 3 }}
+        />
 
         <Button
           type="submit"
           className="submit-button"
+          onClick={handleSubmit}
+          disabled={loading}
         >
-          Send Code
+          {loading ? "Sending..." : "Send Code"}
         </Button>
       </form>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={4000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbar.severity}
+          sx={{ width: "100%" }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </AuthLayout>
   );
 }

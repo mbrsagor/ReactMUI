@@ -12,6 +12,7 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import AuthLayout from "../../layout/AuthLayout";
+
 import axios from "axios";
 import { signInAPIEndpoint } from "../../services/api_services";
 
@@ -28,10 +29,12 @@ export default function SignIn() {
 
   const navigate = useNavigate();
 
+  // Handle snackbar close
   const handleSnackbarClose = () => {
     setSnackbar({ ...snackbar, open: false });
   };
 
+  // Submit handler
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
