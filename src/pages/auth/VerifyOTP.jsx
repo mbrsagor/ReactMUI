@@ -113,7 +113,7 @@ export default function VerifyOTP() {
       });
 
       if (response.data.status === "success") {
-        navigate("/change-password", { state: email });
+        navigate("/auth/change-password", { state: email });
       } else {
         setSnackbar({
           open: true,

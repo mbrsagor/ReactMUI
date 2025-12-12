@@ -79,7 +79,7 @@ export default function ChangePassword() {
                     message: response.data.message,
                     severity: "success",
                 });
-                navigate("/signin");
+                navigate("/auth");
             } else {
                 setSnackbar({
                     open: true,
