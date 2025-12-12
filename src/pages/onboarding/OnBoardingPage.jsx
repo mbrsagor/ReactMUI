@@ -106,52 +106,56 @@ export default function OnBoardingPage() {
     fetchServiceType();
   }, []);
 
-  // Submit
+  // Submit handler
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+  e.preventDefault();
+  setLoading(true);
 
-    try {
-      const formData = new FormData();
-      formData.append("name", name);
-      formData.append("stage", stage);
-      formData.append("order", order);
-      formData.append("description", description);
-      formData.append("is_active", isActive);
-      formData.append("service_type", serviceType);
+  try {
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("stage", stage);
+    formData.append("order", order);
+    formData.append("description", description);
+    formData.append("is_active", isActive);
+    formData.append("service_type", serviceType);
 
-      let response;
+    let response;
 
-      if (editingOnBoarding) {
-        response = await axios.put(
-          onBoardingUpdateDeleteEndpoint(editingOnBoarding.id),
-          formData
-        );
-      } else {
-        response = await axios.post(onBoardingEndpoint, formData);
-      }
-
-      // Set snackbar
-      setSnackbar({
-        open: true,
-        message:
-          response.data.message ||
-          (editingOnBoarding ? "Updated successfully" : "Created successfully"),
-        severity: "success",
-      });
-
-      fetchOnboarding();
-      handleClose();
-    } catch (err) {
-      setSnackbar({
-        open: true,
-        message: "Error saving",
-        severity: "error",
-      });
-    } finally {
-      setLoading(false);
+    if (editingOnBoarding) {
+      response = await axios.put(
+        onBoardingUpdateDeleteEndpoint(editingOnBoarding.id),
+        formData
+      );
+    } else {
+      response = await axios.post(onBoardingEndpoint, formData);
     }
-  };
+
+    setSnackbar({
+      open: true,
+      message:
+        response.data?.message ||
+        (editingOnBoarding
+          ? "Updated successfully"
+          : "Created successfully"),
+      severity: "success",
+    });
+
+    fetchOnboarding();
+    handleClose();
+  } catch (err) {
+    setSnackbar({
+      open: true,
+      message:
+        err.response?.data?.message ||
+        err.message ||
+        "Error saving",
+      severity: "error",
+    });
+  } finally {
+    setLoading(false);
+  }
+};
 
   // Edit
   const handleEditClick = (item) => {
