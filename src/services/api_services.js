@@ -22,6 +22,7 @@ export const endpoint = `${BASE_URL}${apiURL}`;
 // App main endpoint
 export const user = `${endpoint}/user`;
 export const catalogue = `${endpoint}/catalogue`;
+export const company = `${endpoint}/company`;
 
 // Auth endpoints
 export const sentOTPEndpoint = `${user}/sent-otp/`;
@@ -39,3 +40,8 @@ export const passwordResetAPIEndpoint = `${user}/reset-password/`;
 
 // Catalogue endpoints
 export const SuperAdminDashboardEndpoint = `${catalogue}/dashboard/super-admin/`;
+
+// Company endpoints
+export const onBoardingEndpoint = `${company}/onboarding/`;
+export const ServiceTypesAPIEndPoint = `${catalogue}/service-types/`;
+export const onBoardingUpdateDeleteEndpoint = (id) => `${company}/onboarding/${id}/`;

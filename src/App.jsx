@@ -12,6 +12,7 @@ import ArchivedProjects from "./pages/ArchivedProjects";
 import Products from "./pages/Products";
 import ProductCreate from "./pages/ProductCreate";
 import Users from "./pages/users/Users";
+import OnBoardingPage from "./pages/onboarding/OnBoardingPage";
 import Settings from "./pages/Settings";
 
 // AUTH ROUTES
@@ -58,6 +59,7 @@ export default function App() {
             </Route>
 
             <Route path="users" element={<Users />} />
+            <Route path="onboarding" element={<OnBoardingPage />} />
             <Route path="settings" element={<Settings />} />
           </Route>
         </Routes>
