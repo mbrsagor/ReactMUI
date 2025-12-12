@@ -16,7 +16,6 @@ import {
   CircularProgress,
   Snackbar,
   Alert,
-  Slide,
 } from "@mui/material";
 
 import AddIcon from "@mui/icons-material/Add";
@@ -29,10 +28,6 @@ import axios from "../../services/axiosConfig";
 
 import OnBoardingTable from "./OnBoarding";
 
-// Animation
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="down" ref={ref} {...props} />;
-});
 
 export default function OnBoardingPage() {
   const [open, setOpen] = useState(false);
@@ -70,6 +65,7 @@ export default function OnBoardingPage() {
   // Show modal
   const handleShow = () => setOpen(true);
 
+  // Reset form
   const resetForm = () => {
     setName("");
     setStage("");
@@ -186,7 +182,7 @@ export default function OnBoardingPage() {
       />
 
       {/* Create / Update Modal */}
-      <Dialog open={open} onClose={handleClose} TransitionComponent={Transition}>
+      <Dialog open={open} onClose={handleClose}>
         <form onSubmit={handleSubmit}>
           <DialogTitle>
             {editingOnBoarding ? "Update Onboarding" : "Create Onboarding"}

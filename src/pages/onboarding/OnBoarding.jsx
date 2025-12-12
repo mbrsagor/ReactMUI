@@ -17,7 +17,6 @@ import {
   Snackbar,
   Alert,
   Typography,
-  Slide,
 } from "@mui/material";
 
 import EditIcon from "@mui/icons-material/Edit";
@@ -26,11 +25,6 @@ import axios from "../../services/axiosConfig";
 import { onBoardingUpdateDeleteEndpoint } from "../../services/api_services";
 
 const itemsPerPage = 10;
-
-// Animation
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="down" ref={ref} {...props} />;
-});
 
 export default function OnBoardingTable({ onboarding, onEdit, setOnBoarding }) {
   const [currentPage, setCurrentPage] = useState(1);
@@ -163,12 +157,7 @@ export default function OnBoardingTable({ onboarding, onEdit, setOnBoarding }) {
       )}
 
       {/* Delete Confirmation Modal */}
-      <Dialog
-        open={openDelete}
-        TransitionComponent={Transition}
-        keepMounted
-        onClose={() => setOpenDelete(false)}
-      >
+      <Dialog open={openDelete} keepMounted onClose={() => setOpenDelete(false)}>
         <DialogTitle>Confirm Delete</DialogTitle>
         <DialogContent>
           <Typography>
