@@ -14,22 +14,27 @@ import {
   Switch,
   FormControlLabel,
   CircularProgress,
-  IconButton,
   Snackbar,
   Alert,
+  Slide,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
 
+import AddIcon from "@mui/icons-material/Add";
 import {
   onBoardingEndpoint,
   ServiceTypesAPIEndPoint,
   onBoardingUpdateDeleteEndpoint,
 } from "../../services/api_services";
 import axios from "../../services/axiosConfig";
+
 import OnBoardingTable from "./OnBoarding";
 
+// Animation
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="down" ref={ref} {...props} />;
+});
+
 export default function OnBoardingPage() {
-  // Modal
   const [open, setOpen] = useState(false);
 
   const [onboarding, setOnboarding] = useState([]);
@@ -41,26 +46,28 @@ export default function OnBoardingPage() {
   const [order, setOrder] = useState("");
   const [isActive, setIsActive] = useState(true);
   const [description, setDescription] = useState("");
-
   const [loading, setLoading] = useState(false);
+
   const [editingOnBoarding, setEditingOnBoarding] = useState(null);
 
+  // Snackbar
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
-    severity: "info", // "success", "error", "warning", "info"
+    severity: "info",
   });
 
-  // Handle snackbar close
-  const handleSnackbarClose = () => {
+  // Snackbar close
+  const handleSnackbarClose = () =>
     setSnackbar({ ...snackbar, open: false });
-  };
 
+  // Close modal
   const handleClose = () => {
     setOpen(false);
     resetForm();
   };
 
+  // Show modal
   const handleShow = () => setOpen(true);
 
   const resetForm = () => {
@@ -73,7 +80,7 @@ export default function OnBoardingPage() {
     setEditingOnBoarding(null);
   };
 
-  // Fetch onboarding list
+  // Fetch Onboarding
   const fetchOnboarding = async () => {
     try {
       const res = await axios.get(onBoardingEndpoint);
@@ -83,7 +90,7 @@ export default function OnBoardingPage() {
     }
   };
 
-  // Fetch service types
+  // Fetch Service Types
   const fetchServiceType = async () => {
     try {
       const res = await axios.get(ServiceTypesAPIEndPoint);
@@ -93,6 +100,7 @@ export default function OnBoardingPage() {
     }
   };
 
+  // Fetch onboarding list
   useEffect(() => {
     fetchOnboarding();
     fetchServiceType();
@@ -122,9 +130,12 @@ export default function OnBoardingPage() {
       } else {
         response = await axios.post(onBoardingEndpoint, formData);
       }
+
+      // Set snackbar
       setSnackbar({
         open: true,
-        message: response.data.message ||
+        message:
+          response.data.message ||
           (editingOnBoarding ? "Updated successfully" : "Created successfully"),
         severity: "success",
       });
@@ -132,7 +143,6 @@ export default function OnBoardingPage() {
       fetchOnboarding();
       handleClose();
     } catch (err) {
-      console.error(err);
       setSnackbar({
         open: true,
         message: "Error saving",
@@ -144,14 +154,14 @@ export default function OnBoardingPage() {
   };
 
   // Edit
-  const handleEditClick = (onboarding) => {
-    setEditingOnBoarding(onboarding);
-    setName(onboarding.name || "");
-    setStage(onboarding.stage || "");
-    setOrder(onboarding.order || "");
-    setDescription(onboarding.description || "");
-    setServiceType(onboarding.service_type || "");
-    setIsActive(onboarding.is_active ?? true);
+  const handleEditClick = (item) => {
+    setEditingOnBoarding(item);
+    setName(item.name);
+    setStage(item.stage);
+    setOrder(item.order);
+    setDescription(item.description);
+    setServiceType(item.service_type);
+    setIsActive(item.is_active);
     setOpen(true);
   };
 
@@ -159,12 +169,8 @@ export default function OnBoardingPage() {
     <Box>
       {/* Add button */}
       <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={handleShow}
-        >
-          Add Onboarding
+        <Button variant="contained" startIcon={<AddIcon />} onClick={handleShow}>
+          Onboarding
         </Button>
       </Box>
 
@@ -175,15 +181,14 @@ export default function OnBoardingPage() {
         onEdit={handleEditClick}
       />
 
-      {/* Modal */}
-      <Dialog open={open} onClose={handleClose}>
+      {/* Create / Update Modal */}
+      <Dialog open={open} onClose={handleClose} TransitionComponent={Transition}>
         <form onSubmit={handleSubmit}>
           <DialogTitle>
             {editingOnBoarding ? "Update Onboarding" : "Create Onboarding"}
           </DialogTitle>
 
           <DialogContent dividers>
-            {/* Name */}
             <TextField
               label="Name"
               fullWidth
@@ -193,7 +198,6 @@ export default function OnBoardingPage() {
               required
             />
 
-            {/* Stage */}
             <FormControl fullWidth margin="normal">
               <InputLabel>Select Stage</InputLabel>
               <Select
@@ -207,7 +211,6 @@ export default function OnBoardingPage() {
               </Select>
             </FormControl>
 
-            {/* Service Type */}
             <FormControl fullWidth margin="normal">
               <InputLabel>Service Type</InputLabel>
               <Select
@@ -224,7 +227,6 @@ export default function OnBoardingPage() {
               </Select>
             </FormControl>
 
-            {/* Description */}
             <TextField
               label="Description"
               multiline
@@ -235,7 +237,6 @@ export default function OnBoardingPage() {
               onChange={(e) => setDescription(e.target.value)}
             />
 
-            {/* Active */}
             <FormControlLabel
               control={
                 <Switch
@@ -251,15 +252,8 @@ export default function OnBoardingPage() {
             <Button onClick={handleClose} color="error">
               Close
             </Button>
-
-            <Button type="submit" variant="contained" disabled={loading}>
-              {loading ? (
-                <CircularProgress size={22} />
-              ) : editingOnBoarding ? (
-                "Update"
-              ) : (
-                "Create"
-              )}
+            <Button variant="contained" type="submit" disabled={loading}>
+              {loading ? <CircularProgress size={22} /> : editingOnBoarding ? "Update" : "Create"}
             </Button>
           </DialogActions>
         </form>
@@ -272,11 +266,7 @@ export default function OnBoardingPage() {
         onClose={handleSnackbarClose}
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
       >
-        <Alert
-          onClose={handleSnackbarClose}
-          severity={snackbar.severity}
-          sx={{ width: "100%" }}
-        >
+        <Alert onClose={handleSnackbarClose} severity={snackbar.severity}>
           {snackbar.message}
         </Alert>
       </Snackbar>
