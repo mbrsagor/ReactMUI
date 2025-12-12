@@ -93,6 +93,7 @@ export default function OnBoardingTable({ onboarding, onEdit, setOnBoarding }) {
         <Table>
           <TableHead>
             <TableRow>
+              <TableCell>Company</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Stage</TableCell>
               <TableCell>Service Type</TableCell>
@@ -112,6 +113,7 @@ export default function OnBoardingTable({ onboarding, onEdit, setOnBoarding }) {
             ) : (
               paginatedData.map((row) => (
                 <TableRow key={row.id}>
+                  <TableCell>{row.company_name}</TableCell>
                   <TableCell>{row.name}</TableCell>
                   <TableCell>{row.stage_name}</TableCell>
                   <TableCell>
