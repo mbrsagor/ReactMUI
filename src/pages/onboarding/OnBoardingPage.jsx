@@ -21,8 +21,10 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import {
   onBoardingEndpoint,
+  adminOnBoardingCreateEndpoint,
   ServiceTypesAPIEndPoint,
   onBoardingUpdateDeleteEndpoint,
+  companyListFilterEndpoint
 } from "../../services/api_services";
 import axios from "../../services/axiosConfig";
 
@@ -34,6 +36,8 @@ export default function OnBoardingPage() {
 
   const [onboarding, setOnboarding] = useState([]);
   const [serviceTypes, setServiceTypes] = useState([]);
+  const [companyList, setCompanyList] = useState([]);
+  const [companyId, setCompanyId] = useState("");
 
   const [name, setName] = useState("");
   const [serviceType, setServiceType] = useState("");
@@ -70,6 +74,7 @@ export default function OnBoardingPage() {
     setName("");
     setStage("");
     setServiceType("");
+    setCompanyId("");
     setOrder("");
     setDescription("");
     setIsActive(true);
@@ -96,10 +101,22 @@ export default function OnBoardingPage() {
     }
   };
 
+  // Fetch Companies
+  const fetchCompanies = async () => {
+    try {
+      const res = await axios.get(companyListFilterEndpoint);
+      setCompanyList(res.data?.data || []);
+    } catch (err) {
+      console.error(err);
+    }
+  } ;
+
+
   // Fetch onboarding list
   useEffect(() => {
     fetchOnboarding();
     fetchServiceType();
+    fetchCompanies();
   }, []);
 
   // Submit handler
@@ -115,6 +132,7 @@ export default function OnBoardingPage() {
     formData.append("description", description);
     formData.append("is_active", isActive);
     formData.append("service_type", serviceType);
+    formData.append("companies", companies);
 
     let response;
 
@@ -124,7 +142,7 @@ export default function OnBoardingPage() {
         formData
       );
     } else {
-      response = await axios.post(onBoardingEndpoint, formData);
+      response = await axios.post(adminOnBoardingCreateEndpoint, formData);
     }
 
     setSnackbar({
@@ -161,6 +179,7 @@ export default function OnBoardingPage() {
     setOrder(item.order);
     setDescription(item.description);
     setServiceType(item.service_type);
+    setCompanyId(item.companies);
     setIsActive(item.is_active);
     setOpen(true);
   };
@@ -218,10 +237,26 @@ export default function OnBoardingPage() {
                 label="Service Type"
                 onChange={(e) => setServiceType(e.target.value)}
               >
-                <MenuItem value="">None</MenuItem>
+                <MenuItem value="">Select</MenuItem>
                 {serviceTypes.map((type) => (
                   <MenuItem key={type.id} value={type.id}>
                     {type.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Select Company</InputLabel>
+              <Select
+                value={companyId}
+                label="Select Company"
+                onChange={(e) => setCompanyId(e.target.value)}
+              >
+                <MenuItem value="">Select</MenuItem>
+                {companyList.map((company) => (
+                  <MenuItem key={company.id} value={company.id}>
+                    {company.company_name}
                   </MenuItem>
                 ))}
               </Select>

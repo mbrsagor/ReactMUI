@@ -42,6 +42,8 @@ export const passwordResetAPIEndpoint = `${user}/reset-password/`;
 export const SuperAdminDashboardEndpoint = `${catalogue}/dashboard/super-admin/`;
 
 // Company endpoints
+export const companyListFilterEndpoint = `${company}/company-filter/`;
+export const adminOnBoardingCreateEndpoint = `${company}/admin-onboarding/`;
 export const onBoardingEndpoint = `${company}/onboarding/`;
 export const ServiceTypesAPIEndPoint = `${catalogue}/service-types/`;
 export const onBoardingUpdateDeleteEndpoint = (id) => `${company}/onboarding/${id}/`;

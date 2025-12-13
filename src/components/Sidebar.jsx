@@ -14,6 +14,7 @@ import {
 import { Link, useLocation } from "react-router-dom";
 
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import OnBoardingIcon from "@mui/icons-material/Start";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import WorkspacesIcon from "@mui/icons-material/Workspaces";
 import ExpandLess from "@mui/icons-material/ExpandLess";
@@ -34,13 +35,9 @@ const menuItems = [
     icon: <DashboardIcon />,
   },
   {
-    label: "Projects",
-    icon: <WorkspacesIcon />,
-    children: [
-      { label: "All Projects", path: "/projects" },
-      { label: "Create Project", path: "/projects/create" },
-      { label: "Archived", path: "/projects/archived" },
-    ],
+    label: "Onboarding",
+    icon: <OnBoardingIcon />,
+    path: "/onboarding",
   },
   {
     label: "Products",
