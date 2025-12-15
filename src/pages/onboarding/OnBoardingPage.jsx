@@ -132,7 +132,7 @@ export default function OnBoardingPage() {
     formData.append("description", description);
     formData.append("is_active", isActive);
     formData.append("service_type", serviceType);
-    formData.append("companies", companies);
+    formData.append("company", companyId);
 
     let response;
 
