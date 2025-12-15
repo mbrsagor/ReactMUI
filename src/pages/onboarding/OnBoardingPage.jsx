@@ -224,9 +224,9 @@ export default function OnBoardingPage() {
                 label="Select Stage"
                 onChange={(e) => setStage(e.target.value)}
               >
-                <MenuItem value={1}>Do you need...</MenuItem>
-                <MenuItem value={2}>Material?</MenuItem>
-                <MenuItem value={3}>Any Upgrade?</MenuItem>
+                <MenuItem key={1} value={1}>Do you need...</MenuItem>
+                <MenuItem key={2} value={2}>Material?</MenuItem>
+                <MenuItem key={3} value={3}>Any Upgrade?</MenuItem>
               </Select>
             </FormControl>
 
