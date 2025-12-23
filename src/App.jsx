@@ -5,6 +5,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 
 import ProtectedRoute from "./services/ProtectedRoute";
 import AdminLayout from "./layout/AdminLayout";
+// Protected Routes
 import Dashboard from "./pages/dashboard/Dashboard";
 import Projects from "./pages/Projects";
 import ProjectCreate from "./pages/ProjectCreate";
@@ -14,6 +15,7 @@ import ProductCreate from "./pages/ProductCreate";
 import Users from "./pages/users/Users";
 import OnBoardingPage from "./pages/onboarding/OnBoardingPage";
 import Settings from "./pages/Settings";
+import ServiceTypePage from "./pages/core-services/service-type/serviceTypePage";
 
 // AUTH ROUTES
 import SignIn from "./pages/auth/SignIn";
@@ -47,10 +49,8 @@ export default function App() {
           >
             <Route index element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
 
-            <Route path="projects">
-              <Route index element={<Projects />} />
-              <Route path="create" element={<ProjectCreate />} />
-              <Route path="archived" element={<ArchivedProjects />} />
+            <Route path="services">
+              <Route path="service-type" element={<ServiceTypePage />} />
             </Route>
 
             <Route path="products">
