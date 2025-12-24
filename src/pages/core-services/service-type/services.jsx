@@ -38,14 +38,17 @@ export default function Services({ services, onEdit, setServices }) {
     severity: "info",
   });
 
+  // Current page
   useEffect(() => {
     setCurrentPage(1);
   }, [services]);
 
+  // Page change
   const handlePageChange = (event, value) => {
     setCurrentPage(value);
   };
 
+  // Delete click
   const handleDeleteClick = (service) => {
     setServiceToDelete(service);
     setShowDeleteModal(true);
@@ -56,6 +59,7 @@ export default function Services({ services, onEdit, setServices }) {
     setSnackbar({ ...snackbar, open: false });
   };
 
+  // Delete confirm
   const handleDeleteConfirm = async () => {
     try {
       await axios.delete(
@@ -85,6 +89,7 @@ export default function Services({ services, onEdit, setServices }) {
     }
   };
 
+  // Pagination
   const totalPages = Math.ceil(services.length / itemsPerPage);
 
   const paginatedServices = services.slice(
