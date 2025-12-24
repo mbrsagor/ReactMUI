@@ -12,7 +12,7 @@ const API_URLS = {
 //         console.warn("⚠️ Invalid API URL — falling back to development URL");
 //         return API_URLS.development;
 //     })();
-      
+
 export const BASE_URL = "http://127.0.0.1:8000"; // Default to development
 
 export const apiURL = "/api/v1";
@@ -42,6 +42,9 @@ export const passwordResetAPIEndpoint = `${user}/reset-password/`;
 export const SuperAdminDashboardEndpoint = `${catalogue}/dashboard/super-admin/`;
 export const ServiceTypesAPIEndPoint = `${catalogue}/service-types/`;
 export const ServiceTypeUpdateDeleteAPIEndPoint = (id) => `${catalogue}/service-type/${id}/`;
+export const ServiceUtilsAPIEndPoint = `${catalogue}/service-utils/`;
+export const ServiceDetailAPIEndPoint = (id) => `${catalogue}/service/${id}/`;
+export const ServicesAPIEndPoint = `${catalogue}/services/`;
 
 // Company endpoints
 export const companyListFilterEndpoint = `${company}/company-filter/`;

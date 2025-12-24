@@ -13,6 +13,10 @@ import Users from "./pages/users/Users";
 import OnBoardingPage from "./pages/onboarding/OnBoardingPage";
 import Settings from "./pages/Settings";
 import ServiceTypePage from "./pages/core-services/service-type/serviceTypePage";
+import ServicePage from "./pages/core-services/services/servicePage";
+import CreateService from "./pages/core-services/services/create-service/createService";
+import ServiceUpdate from "./pages/core-services/services/update-service/serviceUpdate";
+import ServiceDetails from "./pages/core-services/services/serviceDetails";
 
 // AUTH ROUTES
 import SignIn from "./pages/auth/SignIn";
@@ -47,6 +51,10 @@ export default function App() {
             <Route index element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
 
             <Route path="services">
+              <Route index element={<ServicePage />} />
+              <Route path="create" element={<CreateService />} />
+              <Route path="update/:id" element={<ServiceUpdate />} />
+              <Route path="detail/:id" element={<ServiceDetails />} />
               <Route path="service-type" element={<ServiceTypePage />} />
             </Route>
 
