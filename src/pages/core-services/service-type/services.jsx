@@ -98,10 +98,11 @@ export default function Services({ services, onEdit, setServices }) {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>ID</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Status</TableCell>
+              <TableCell>Icon</TableCell>
               <TableCell>Created Date</TableCell>
+              <TableCell>Updated Date</TableCell>
               <TableCell align="center">Actions</TableCell>
             </TableRow>
           </TableHead>
@@ -115,10 +116,17 @@ export default function Services({ services, onEdit, setServices }) {
             ) : (
               paginatedServices.map((service) => (
                 <TableRow key={service.id}>
-                  <TableCell>{service.id}</TableCell>
                   <TableCell>{service.name}</TableCell>
                   <TableCell>{service.is_active ? "Active" : "Inactive"}</TableCell>
+                  <TableCell>
+                    <img
+                      src={service.icon}
+                      alt={service.name}
+                      style={{ width: "50px", height: "50px" }}
+                    />
+                  </TableCell>
                   <TableCell>{service.created_at}</TableCell>
+                  <TableCell>{service.updated_at}</TableCell>
                   <TableCell align="center">
                     <IconButton 
                       color="primary" 
