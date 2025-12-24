@@ -92,7 +92,7 @@ export default function UpdateServiceForm({ serviceId }) {
         setExistingBanner(data.banner || "");
         setExistingImages(data.images || []);
 
-        // ✅ FIXED normalizeItem to support multiple possible backend keys
+        // FIXED normalizeItem to support multiple possible backend keys
         const normalizeItem = (i) => ({
           name: i?.name || i?.title || "",
           description:
@@ -208,7 +208,7 @@ export default function UpdateServiceForm({ serviceId }) {
       }
 
       showSnackbar("Service updated successfully!");
-      console.log("✅ Updated Service:", response.data);
+      console.log("Updated Service:", response.data);
     } catch (err) {
       showSnackbar(err?.response?.data?.message || "Something went wrong.", "error");
     } finally {

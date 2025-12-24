@@ -15,16 +15,20 @@ import {
   Typography,
   Box,
   IconButton,
-  Paper,
   Snackbar,
-  Alert
+  Alert,
 } from "@mui/material";
+
 import { Add, Remove, Save } from "@mui/icons-material";
 
 export default function CreateServiceForm() {
   const [serviceTypes, setServiceTypes] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
 
   // Form fields
   const [title, setTitle] = useState("");
@@ -33,7 +37,7 @@ export default function CreateServiceForm() {
   const [description, setDescription] = useState("");
   const [serviceType, setServiceType] = useState("");
 
-  // File uploads
+  // Files
   const [banner, setBanner] = useState(null);
   const [images, setImages] = useState([]);
 
@@ -45,55 +49,24 @@ export default function CreateServiceForm() {
     { name: "", description: "" },
   ]);
 
-  const showSnackbar = (message, severity = "success") => {
+  const showSnackbar = (message, severity = "success") =>
     setSnackbar({ open: true, message, severity });
-  };
 
-  const handleCloseSnackbar = () => {
-    setSnackbar({ ...snackbar, open: false });
-  };
+  const handleCloseSnackbar = () =>
+    setSnackbar((prev) => ({ ...prev, open: false }));
 
-  // Fetch categories + service types
   useEffect(() => {
     const fetchUtils = async () => {
       try {
-        const response = await axios.get(ServiceUtilsAPIEndPoint);
-        setServiceTypes(response.data?.data?.service_types || []);
-      } catch (error) {
-        console.error("Error fetching service utils:", error);
-        showSnackbar("Failed to fetch categories or service types.", "error");
+        const res = await axios.get(ServiceUtilsAPIEndPoint);
+        setServiceTypes(res.data?.data?.service_types || []);
+      } catch {
+        showSnackbar("Failed to fetch service types", "error");
       }
     };
     fetchUtils();
   }, []);
 
-  // File handlers
-  const handleBannerChange = (e) => setBanner(e.target.files[0]);
-  const handleImagesChange = (e) => setImages([...e.target.files]);
-
-  // Dynamic includes
-  const handleIncludeChange = (index, field, value) => {
-    const updated = [...serviceIncludes];
-    updated[index][field] = value;
-    setServiceIncludes(updated);
-  };
-  const handleAddInclude = () =>
-    setServiceIncludes([...serviceIncludes, { name: "", description: "" }]);
-  const handleRemoveInclude = (index) =>
-    setServiceIncludes(serviceIncludes.filter((_, i) => i !== index));
-
-  // Dynamic upgrades
-  const handleUpgradeChange = (index, field, value) => {
-    const updated = [...upgradeServices];
-    updated[index][field] = value;
-    setUpgradeServices(updated);
-  };
-  const handleAddUpgrade = () =>
-    setUpgradeServices([...upgradeServices, { name: "", description: "" }]);
-  const handleRemoveUpgrade = (index) =>
-    setUpgradeServices(upgradeServices.filter((_, i) => i !== index));
-
-  // Submit data 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -104,31 +77,27 @@ export default function CreateServiceForm() {
         price: parseFloat(price),
         unit,
         description,
-        service_type: parseInt(serviceType),
-        includes: serviceIncludes.filter((i) => i.name.trim() !== ""),
-        upgrades: upgradeServices.filter((i) => i.name.trim() !== ""),
+        service_type: Number(serviceType),
+        includes: serviceIncludes.filter((i) => i.name.trim()),
+        upgrades: upgradeServices.filter((i) => i.name.trim()),
       };
 
-      const response = await axios.post(ServicesAPIEndPoint, payload, {
-        headers: { "Content-Type": "application/json" },
-      });
+      const res = await axios.post(ServicesAPIEndPoint, payload);
 
-      if (banner || images.length > 0) {
-        const serviceId = response.data?.data?.id;
-        if (serviceId) {
-          const formData = new FormData();
-          if (banner) formData.append("banner", banner);
-          images.forEach((img) => formData.append("images", img));
+      if (banner || images.length) {
+        const fd = new FormData();
+        if (banner) fd.append("banner", banner);
+        images.forEach((img) => fd.append("images", img));
 
-          await axios.patch(`${ServicesAPIEndPoint}${serviceId}/`, formData, {
-            headers: { "Content-Type": "multipart/form-data" },
-          });
-        }
+        await axios.patch(
+          `${ServicesAPIEndPoint}${res.data.data.id}/`,
+          fd
+        );
       }
 
-      showSnackbar("Service created successfully!");
+      showSnackbar("Service created successfully");
 
-      // Reset form
+      // reset
       setTitle("");
       setPrice("");
       setUnit("");
@@ -138,244 +107,157 @@ export default function CreateServiceForm() {
       setImages([]);
       setServiceIncludes([{ name: "", description: "" }]);
       setUpgradeServices([{ name: "", description: "" }]);
-    } catch (err) {
-      showSnackbar(err?.response?.data?.message || "Something went wrong.", "error");
+    } catch {
+      showSnackbar("Something went wrong", "error");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit} noValidate>
-      <Grid container spacing={3}>
-        {/* Left Column */}
-        <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 2 }}>
-            <Box sx={{ mb: 2 }}>
-              <TextField
-                fullWidth
-                label="Service Title"
-                placeholder="Write here"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                required
-                variant="outlined"
-              />
-            </Box>
-            <Box sx={{ mb: 2 }}>
-              <TextField
-                fullWidth
-                label="Price"
-                type="number"
-                placeholder="Write here"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-                required
-                variant="outlined"
-              />
-            </Box>
-            <Box sx={{ mb: 2 }}>
-              <TextField
-                fullWidth
-                label="Unit"
-                placeholder="Write here"
-                value={unit}
-                onChange={(e) => setUnit(e.target.value)}
-                required
-                variant="outlined"
-              />
-            </Box>
-            <Box sx={{ mb: 2 }}>
-              <FormControl fullWidth required>
-                <InputLabel>Service Type</InputLabel>
-                <Select
-                  value={serviceType}
-                  label="Service Type"
-                  onChange={(e) => setServiceType(e.target.value)}
-                >
-                  <MenuItem value="">
-                    <em>Select Service Type</em>
-                  </MenuItem>
-                  {serviceTypes.map((st) => (
-                    <MenuItem key={st.id} value={st.id}>
-                      {st.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Box>
-            <Box sx={{ mb: 2 }}>
-              <TextField
-                fullWidth
-                label="Description"
-                multiline
-                rows={4}
-                placeholder="Write here"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                required
-                variant="outlined"
-              />
-            </Box>
-          </Paper>
+    <Box component="form" onSubmit={handleSubmit} sx={{ width: "100%" }}>
+      <Grid container spacing={3} sx={{ width: "100%", m: 0 }}>
+
+        {/* LEFT COLUMN */}
+        <Grid item xs={12} md={8}>
+          <TextField fullWidth label="Service Title" value={title}
+            onChange={(e) => setTitle(e.target.value)} sx={{ mb: 2 }} />
+
+          <TextField fullWidth type="number" label="Price" value={price}
+            onChange={(e) => setPrice(e.target.value)} sx={{ mb: 2 }} />
+
+          <TextField fullWidth label="Unit" value={unit}
+            onChange={(e) => setUnit(e.target.value)} sx={{ mb: 2 }} />
+
+          <FormControl fullWidth sx={{ mb: 2 }}>
+            <InputLabel>Service Type</InputLabel>
+            <Select value={serviceType} label="Service Type"
+              onChange={(e) => setServiceType(e.target.value)}>
+              {serviceTypes.map((st) => (
+                <MenuItem key={st.id} value={st.id}>
+                  {st.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <TextField
+            fullWidth
+            multiline
+            rows={5}
+            label="Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
         </Grid>
 
-        {/* Right Column */}
-        <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 2 }}>
-            <Box sx={{ mb: 2 }}>
-              <Typography variant="subtitle1" gutterBottom>
-                Banner
-              </Typography>
-              <Button
-                variant="outlined"
-                component="label"
-                fullWidth
-              >
-                Upload Banner
-                <input
-                  type="file"
-                  hidden
-                  onChange={handleBannerChange}
-                  accept="image/*"
-                />
-              </Button>
-              {banner && <Typography variant="caption" display="block" sx={{ mt: 1 }}>{banner.name}</Typography>}
-            </Box>
-            <Box sx={{ mb: 2 }}>
-              <Typography variant="subtitle1" gutterBottom>
-                Service Images
-              </Typography>
-              <Button
-                variant="outlined"
-                component="label"
-                fullWidth
-              >
-                Upload Images
-                <input
-                  type="file"
-                  hidden
-                  multiple
-                  onChange={handleImagesChange}
-                  accept="image/*"
-                />
-              </Button>
-              {images.length > 0 && (
-                <Typography variant="caption" display="block" sx={{ mt: 1 }}>
-                  {images.length} images selected
-                </Typography>
-              )}
-            </Box>
+        {/* RIGHT COLUMN */}
+        <Grid item xs={12} md={4}>
+          <Button fullWidth variant="outlined" component="label" sx={{ mb: 2 }}>
+            Upload Banner
+            <input hidden type="file" accept="image/*"
+              onChange={(e) => setBanner(e.target.files[0])} />
+          </Button>
 
-            {/* Service Includes */}
-            <Box sx={{ mb: 3 }}>
-              <Typography variant="subtitle1" gutterBottom>
-                Includes
-              </Typography>
-              {serviceIncludes.map((item, index) => (
-                <Grid container spacing={1} key={index} sx={{ mb: 1 }} alignItems="center">
-                  <Grid item xs={5}>
-                    <TextField
-                      fullWidth
-                      size="small"
-                      placeholder="Name"
-                      value={item.name}
-                      onChange={(e) =>
-                        handleIncludeChange(index, "name", e.target.value)
-                      }
-                      variant="outlined"
-                    />
-                  </Grid>
-                  <Grid item xs={5}>
-                    <TextField
-                      fullWidth
-                      size="small"
-                      placeholder="Description"
-                      value={item.description}
-                      onChange={(e) =>
-                        handleIncludeChange(index, "description", e.target.value)
-                      }
-                      variant="outlined"
-                    />
-                  </Grid>
-                  <Grid item xs={2} sx={{ display: 'flex' }}>
-                    <IconButton onClick={handleAddInclude} color="primary" size="small">
-                      <Add />
-                    </IconButton>
-                    {serviceIncludes.length > 1 && (
-                      <IconButton onClick={() => handleRemoveInclude(index)} color="error" size="small">
-                        <Remove />
-                      </IconButton>
-                    )}
-                  </Grid>
-                </Grid>
-              ))}
-            </Box>
+          <Button fullWidth variant="outlined" component="label" sx={{ mb: 3 }}>
+            Upload Images
+            <input hidden multiple type="file" accept="image/*"
+              onChange={(e) => setImages([...e.target.files])} />
+          </Button>
 
-            {/* Upgrade Services */}
-            <Box sx={{ mb: 2 }}>
-              <Typography variant="subtitle1" gutterBottom>
-                Upgrades
-              </Typography>
-              {upgradeServices.map((item, index) => (
-                <Grid container spacing={1} key={index} sx={{ mb: 1 }} alignItems="center">
-                  <Grid item xs={5}>
-                    <TextField
-                      fullWidth
-                      size="small"
-                      placeholder="Name"
-                      value={item.name}
-                      onChange={(e) =>
-                        handleUpgradeChange(index, "name", e.target.value)
-                      }
-                      variant="outlined"
-                    />
-                  </Grid>
-                  <Grid item xs={5}>
-                    <TextField
-                      fullWidth
-                      size="small"
-                      placeholder="Description"
-                      value={item.description}
-                      onChange={(e) =>
-                        handleUpgradeChange(index, "description", e.target.value)
-                      }
-                      variant="outlined"
-                    />
-                  </Grid>
-                  <Grid item xs={2} sx={{ display: 'flex' }}>
-                    <IconButton onClick={handleAddUpgrade} color="primary" size="small">
-                      <Add />
-                    </IconButton>
-                    {upgradeServices.length > 1 && (
-                      <IconButton onClick={() => handleRemoveUpgrade(index)} color="error" size="small">
-                        <Remove />
-                      </IconButton>
-                    )}
-                  </Grid>
-                </Grid>
-              ))}
-            </Box>
-          </Paper>
+          {/* INCLUDES */}
+          <Typography variant="subtitle1" sx={{ mb: 1 }}>
+            Includes
+          </Typography>
+          {serviceIncludes.map((item, i) => (
+            <Grid container spacing={1} key={i} sx={{ mb: 1 }}>
+              <Grid item xs={5}>
+                <TextField size="small" fullWidth placeholder="Name"
+                  value={item.name}
+                  onChange={(e) => {
+                    const v = [...serviceIncludes];
+                    v[i].name = e.target.value;
+                    setServiceIncludes(v);
+                  }} />
+              </Grid>
+              <Grid item xs={5}>
+                <TextField size="small" fullWidth placeholder="Description"
+                  value={item.description}
+                  onChange={(e) => {
+                    const v = [...serviceIncludes];
+                    v[i].description = e.target.value;
+                    setServiceIncludes(v);
+                  }} />
+              </Grid>
+              <Grid item xs={2}>
+                <IconButton onClick={() =>
+                  setServiceIncludes([...serviceIncludes, { name: "", description: "" }])
+                }>
+                  <Add />
+                </IconButton>
+                {serviceIncludes.length > 1 && (
+                  <IconButton color="error" onClick={() =>
+                    setServiceIncludes(serviceIncludes.filter((_, idx) => idx !== i))
+                  }>
+                    <Remove />
+                  </IconButton>
+                )}
+              </Grid>
+            </Grid>
+          ))}
+
+          {/* UPGRADES */}
+          <Typography variant="subtitle1" sx={{ mt: 3, mb: 1 }}>
+            Upgrades
+          </Typography>
+          {upgradeServices.map((item, i) => (
+            <Grid container spacing={1} key={i} sx={{ mb: 1 }}>
+              <Grid item xs={5}>
+                <TextField size="small" fullWidth placeholder="Name"
+                  value={item.name}
+                  onChange={(e) => {
+                    const v = [...upgradeServices];
+                    v[i].name = e.target.value;
+                    setUpgradeServices(v);
+                  }} />
+              </Grid>
+              <Grid item xs={5}>
+                <TextField size="small" fullWidth placeholder="Description"
+                  value={item.description}
+                  onChange={(e) => {
+                    const v = [...upgradeServices];
+                    v[i].description = e.target.value;
+                    setUpgradeServices(v);
+                  }} />
+              </Grid>
+              <Grid item xs={2}>
+                <IconButton onClick={() =>
+                  setUpgradeServices([...upgradeServices, { name: "", description: "" }])
+                }>
+                  <Add />
+                </IconButton>
+                {upgradeServices.length > 1 && (
+                  <IconButton color="error" onClick={() =>
+                    setUpgradeServices(upgradeServices.filter((_, idx) => idx !== i))
+                  }>
+                    <Remove />
+                  </IconButton>
+                )}
+              </Grid>
+            </Grid>
+          ))}
         </Grid>
       </Grid>
 
       <Box sx={{ mt: 3 }}>
-        <Button
-          type="submit"
-          variant="contained"
-          color="success"
-          disabled={loading}
-          startIcon={<Save />}
-        >
+        <Button type="submit" variant="contained" color="success"
+          startIcon={<Save />} disabled={loading}>
           {loading ? "Saving..." : "Save"}
         </Button>
       </Box>
 
-      <Snackbar open={snackbar.open} autoHideDuration={6000} onClose={handleCloseSnackbar}>
-        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%' }}>
-          {snackbar.message}
-        </Alert>
+      <Snackbar open={snackbar.open} autoHideDuration={4000} onClose={handleCloseSnackbar}>
+        <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
       </Snackbar>
     </Box>
   );

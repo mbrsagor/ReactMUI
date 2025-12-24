@@ -3,8 +3,6 @@ import { useParams } from "react-router-dom";
 import { Box, Card, CardContent, Typography } from "@mui/material";
 
 import UpdateServiceForm from "./updateServiceForm";
-// import Layout from "../../../../components/common/layout";
-// import PageTitle from "../../../../components/common/pageTitle";
 
 export default function ServiceUpdate() {
   const { id } = useParams();

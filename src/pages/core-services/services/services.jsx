@@ -85,20 +85,25 @@ export default function Services() {
   };
 
   return (
-    <Box sx={{ mt: 4 }}>
-      <TableContainer component={Paper}>
+    <Box>
+      <TableContainer
+        component={Paper}
+        sx={{
+          borderRadius: 3,
+          width: "100% !important",
+          maxWidth: "100% !important",
+        }}
+      >
         <Table sx={{ minWidth: 650 }} aria-label="services table">
           <TableHead>
-            <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
-              <TableCell sx={{ fontWeight: "bold" }}>Title</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>Price</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>Unit</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>Category</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>Status</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>Created Date</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }} align="center">
-                Actions
-              </TableCell>
+            <TableRow>
+              <TableCell>Title</TableCell>
+              <TableCell>Price</TableCell>
+              <TableCell>Unit</TableCell>
+              <TableCell>Category</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell>Created Date</TableCell>
+              <TableCell align="center">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -106,8 +111,11 @@ export default function Services() {
               services.map((service) => (
                 <TableRow
                   key={service.id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  hover
+                  sx={{
+                    transition: "0.2s",
+                    "&:hover": { background: "#f7f7f7" },
+                    "&:last-child td, &:last-child th": { border: 0 }
+                  }}
                 >
                   <TableCell>{service.title}</TableCell>
                   <TableCell>{service.price}</TableCell>
