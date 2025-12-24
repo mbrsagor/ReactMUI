@@ -10,12 +10,9 @@ import {
   Button,
   TextField,
   FormControlLabel,
-  Checkbox,
   Snackbar,
   Alert,
   Box,
-  Typography,
-  FormGroup,
   Switch,
   CircularProgress,
 } from "@mui/material";
@@ -57,16 +54,21 @@ export default function ServiceTypePage() {
     severity: "info",
   });
 
+  // Handle snackbar close
   const handleSnackbarClose = () => {
     setSnackbar({ ...snackbar, open: false });
   };
 
+  // Handle close
   const handleClose = () => {
     setShow(false);
     resetForm();
   };
+
+  // Handle show
   const handleShow = () => setShow(true);
 
+  // Reset form
   const resetForm = () => {
     setName("");
     setDescription("");
@@ -77,6 +79,7 @@ export default function ServiceTypePage() {
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
+  // Fetch services
   const fetchServices = async () => {
     try {
       const res = await axios.get(ServiceTypesAPIEndPoint);
@@ -86,10 +89,12 @@ export default function ServiceTypePage() {
     }
   };
 
+  // Fetch services
   useEffect(() => {
     fetchServices();
   }, []);
 
+  // Handle submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -138,6 +143,7 @@ export default function ServiceTypePage() {
     }
   };
 
+  // Edit click
   const handleEditClick = (service) => {
     setEditingService(service);
     setName(service.name || "");
