@@ -94,7 +94,7 @@ export default function Services({ services, onEdit, setServices }) {
 
   return (
     <>
-      <TableContainer component={Paper} className="mt-4">
+      <TableContainer component={Paper} sx={{ mt: 4 }}>
         <Table>
           <TableHead>
             <TableRow>

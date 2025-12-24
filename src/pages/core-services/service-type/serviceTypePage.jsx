@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import AddIcon from "@mui/icons-material/Add";
+import { styled } from '@mui/material/styles';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import {
   Dialog,
   DialogTitle,
@@ -13,13 +15,27 @@ import {
   Alert,
   Box,
   Typography,
+  FormGroup,
+  Switch,
+  CircularProgress,
 } from "@mui/material";
 
 import Services from "./services";
-// Layout and PageTitle removed as they are handled by AdminLayout or not present
-
 import axios from "../../../services/axiosConfig";
 import { ServiceTypesAPIEndPoint, ServiceTypeUpdateDeleteAPIEndPoint } from "../../../services/api_services";
+
+// Styled components
+const VisuallyHiddenInput = styled('input')({
+  clip: 'rect(0 0 0 0)',
+  clipPath: 'inset(50%)',
+  height: 1,
+  overflow: 'hidden',
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  whiteSpace: 'nowrap',
+  width: 1,
+});
 
 export default function ServiceTypePage() {
   const [show, setShow] = useState(false);
@@ -134,8 +150,7 @@ export default function ServiceTypePage() {
 
   return (
     <Box>
-       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
-        <Typography variant="h5">Service Types</Typography>
+       <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
         <Button 
           variant="contained" 
           startIcon={<AddIcon />} 
@@ -145,78 +160,68 @@ export default function ServiceTypePage() {
         </Button>
       </Box>
 
-      <div className="container-fluid p-0">
-        <div className="row">
-          <div className="col-12 p-0">
-            <div className="card">
-              <div className="card-body">
-                <Services
-                  services={services}
-                  setServices={setServices}
-                  onEdit={handleEditClick}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* Services Table */}
+      <Services
+        services={services}
+        setServices={setServices}
+        onEdit={handleEditClick}
+      />
 
       {/* Create/Edit Dialog */}
-      <Dialog open={show} onClose={handleClose} fullWidth maxWidth="sm">
+      <Dialog open={show} onClose={handleClose}>
         <form onSubmit={handleSubmit}>
           <DialogTitle>
             {editService ? "Update service type" : "Create service type"}
           </DialogTitle>
-          <DialogContent>
-            <div className="mb-3 mt-2">
-              <TextField
-                label="Service type name"
-                fullWidth
-                variant="outlined"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
-            </div>
+          <DialogContent dividers>
+            <TextField
+              label="Service type name"
+              fullWidth
+              variant="outlined"
+              margin="normal"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
 
-            <div className="mb-3">
-              <TextField
-                label="Service type description (optional)"
-                fullWidth
-                multiline
-                rows={3}
-                variant="outlined"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              />
-            </div>
-
-            <div className="mb-3">
-              <label htmlFor="image" className="form-label">
-                Icon {editService ? "(Leave empty to keep current)" : ""}
-              </label>
-              <input
+            <TextField
+              label="Service type description (optional)"
+              fullWidth
+              multiline
+              rows={3}
+              variant="outlined"
+              margin="normal"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+             <Button
+      component="label"
+      role={undefined}
+      variant="contained"
+      tabIndex={-1}
+      startIcon={<CloudUploadIcon />}
+      sx={{ mt: 2, mb: 1 }}>
+            <Box>
+              Upload Icon
+              <VisuallyHiddenInput
                 type="file"
-                className="form-control"
-                id="image"
                 accept="image/*"
                 ref={fileInputRef}
+                multiple
                 onChange={(e) => setImage(e.target.files[0])}
               />
-            </div>
-
-            <div className="mb-3">
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={isActive}
-                    onChange={() => setIsActive(!isActive)}
-                    color="primary"
-                  />
-                }
-                label="Active"
-              />
-            </div>
+            </Box>
+      </Button>
+      <FormControlLabel
+              control={
+                <Switch
+                  defaultChecked={isActive}
+                  onChange={() => setIsActive(!isActive)}
+                  color="primary"
+                />
+              }
+              label="Active"
+            />
           </DialogContent>
           <DialogActions>
             <Button variant="outlined" color="error" onClick={handleClose}>
@@ -228,7 +233,7 @@ export default function ServiceTypePage() {
               type="submit"
               disabled={loading}
             >
-              {loading ? "Saving..." : editService ? "Update" : "Create"}
+              {loading ? <CircularProgress size={24} /> : editService ? "Update" : "Create"}
             </Button>
           </DialogActions>
         </form>

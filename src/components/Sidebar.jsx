@@ -16,7 +16,6 @@ import { Link, useLocation } from "react-router-dom";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import OnBoardingIcon from "@mui/icons-material/Start";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
-import WorkspacesIcon from "@mui/icons-material/Workspaces";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -40,11 +39,12 @@ const menuItems = [
     path: "/onboarding",
   },
   {
-    label: "Products",
+    label: "Services",
     icon: <FolderOpenIcon />,
     children: [
-      { label: "All Products", path: "/products" },
-      { label: "Create Product", path: "/products/create" },
+      { label: "Service Type", path: "/services/service-type" },
+      { label: "All services", path: "/services" },
+      { label: "Create service", path: "/services/create" },
     ],
   },
   {

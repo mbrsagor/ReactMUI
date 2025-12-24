@@ -7,9 +7,6 @@ import ProtectedRoute from "./services/ProtectedRoute";
 import AdminLayout from "./layout/AdminLayout";
 // Protected Routes
 import Dashboard from "./pages/dashboard/Dashboard";
-import Projects from "./pages/Projects";
-import ProjectCreate from "./pages/ProjectCreate";
-import ArchivedProjects from "./pages/ArchivedProjects";
 import Products from "./pages/Products";
 import ProductCreate from "./pages/ProductCreate";
 import Users from "./pages/users/Users";
